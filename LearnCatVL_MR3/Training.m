@@ -1,7 +1,7 @@
 function Training
 %TRAINING Task to train on images (either categorize or perform 2-back)
 
-% 8 mini-blocks -- 4 category, 4 nback
+% 8 mini-blocks -- 4 category, 4 nback just to test
 % In each mini-block, 6 of the images repeat
 % Each image repeats once in the entire block
 
