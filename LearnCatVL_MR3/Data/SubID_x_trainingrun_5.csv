@@ -1,0 +1,6 @@
+x, 5, 1, cat, 1, 1, n, m, 21, 041.jpg, singleton, cat_singleton, 6323.0064, 0, 0.6494
+x, 5, 1, cat, 2, 1, m, n, 20, 040.jpg, singleton, cat_singleton, 6323.0048, 0, 0.3007
+x, 5, 1, cat, 3, 1, m, m, 21, 041.jpg, singleton, cat_singleton_2back, 6323.0034, 1, 0.4323
+x, 5, 1, cat, 4, 1, n, n, 20, 040.jpg, singleton, cat_singleton_2back, 6323.0059, 1, 0.6741
+x, 5, 1, cat, 5, 0, , n, 13, 076.jpg, different, cat_different_pair1, 6323.0077, 0, -1.0000
+x, 5, 1, cat, 6, 0, , m, 14, 095.jpg, different, cat_different_pair2, 6323.0034, 0, -1.0000
