@@ -170,8 +170,6 @@ trainingBlocks = [];
 catBlockIdx = 0;
 nbackBlockIdx = 0;
 
-
-
 for idx = 1:(2*nMiniBlocks)
     thisBlock = [];
     if strmatch(thisTaskOrder, 'cat')

@@ -1,8 +1,0 @@
-99, 1, 1, nback, 30, 1, n, n, 44, 024.jpg, singleton, nback_singleton, 378.8792, 1, 0.2603
-99, 1, 2, cat, 30, 1, m, n, 10, 011.jpg, different, cat_different_pair2, 378.8826, 0, 0.3934
-99, 1, 3, nback, 30, 1, n, n, 41, 076.jpg, singleton, nback_singleton, 378.8790, 1, 0.4570
-99, 1, 4, cat, 30, 0, , m, 16, 005.jpg, different, cat_different_pair2, 378.8823, 0, -1.0000
-99, 1, 5, nback, 30, 1, n, n, 44, 024.jpg, singleton, nback_singleton, 378.8787, 1, 0.2682
-99, 1, 6, cat, 30, 1, m, n, 17, 069.jpg, singleton, cat_singleton, 378.8820, 0, 0.3865
-99, 1, 7, nback, 30, 1, n, n, 43, 004.jpg, singleton, nback_singleton, 378.8784, 1, 0.5027
-99, 1, 8, cat, 30, 1, m, m, 24, 026.jpg, singleton, cat_singleton_2back, 378.8817, 1, 0.5388

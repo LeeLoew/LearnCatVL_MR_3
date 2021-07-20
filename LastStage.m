@@ -1,7 +1,7 @@
 function LastStage
 %LAST STAGE Recognition task
 
-prompt={'Enter the subject ID','Training run number'};
+prompt={'Enter the subject ID','Test run number'};
 name='Input for training run';
 numlines=1;
 defaultanswer={'x','0'};
@@ -13,8 +13,6 @@ runNum = str2num(answer{2});
 % timing variables
 ISI = 1;
 upDur = 1;
-instructionPause = 5; 
-instructionBlank = 5;
 
 % check if the subject ID is valid, if so load configuration...
 
@@ -37,14 +35,11 @@ if exist(savepathmat) || exist(savepathcsv)
     end
 end
 
-% set up trial sequence for this run
-
-trial
-
 % random seed
 randseed = rng('shuffle');
 
-
+% set up trial sequence for this run
+trialSequence = Shuffle(1:length(recogTrials));
 
 % configure screen
 Screen('Preference', 'SkipSyncTests', 1);
@@ -59,14 +54,13 @@ for idx = 1:48 % hard coded -- this is the number of images used across both tas
 end
 imRect = CenterRect([0 0 200 200], wrect);
 
-% TO DO : Show instructions here
-DrawFormattedText(w, 'Get ready for the next run of training. Pay close attention to the instructions and use the two buttons to respond. Try to be as accurate as possible.\n', 'center', 'center');
+DrawFormattedText(w, 'Starting the recognition task. \nTrigger each trial with the space bar.\nYou will see two pairs. Pick the more familiar one.\nSpace to start.\n', 'center', 'center');
 instructionsUpTime = Screen(w, 'Flip');
 
 while 1
     [keyDown, secs, keyCodes] = KbCheck(-1);
     if keyDown
-        if keyCodes(KbName('5%'))
+        if keyCodes(KbName('space'))
             break;
         end
     end
@@ -76,121 +70,126 @@ while keyDown
     [keyDown, secs, keyCodes] = KbCheck(-1);
 end
 
-catperf = 0;
-nbackperf = 0;
-
 fp = fopen(savepathcsv, 'w');
 
-
-for block = 1:length(trainingBlocks)
-    trainingBlocks(block).RT = [];
-    trainingBlocks(block).AC = [];
-    trainingBlocks(block).upTimeErr = [];
-    cataccount = 0;
-    nbackaccount = 0;
+for idx = 1:length(trialSequence)
+    trialID = trialSequence(idx);
+    thisTrial = recogTrials(trialID);
     
-    % block break / instructions
-    % TODO : Make this a timed break!!!
-    if strmatch(trainingBlocks(block).task, 'cat')
-        blockbreakstring = 'Categorization block beginning... \n Press the left button for category A images \n and the right button for category B images. Try to be as accurate as possible.';
-        if block > 2
-            blockbreakstring = [blockbreakstring '\nYou were ' num2str(catperf) '% correct on the last categorization block.'];
-        end
+    if strmatch(thisTrial.task, 'cat')
+        targim1ID = catItems(thisTrial.targpair).im1idx;
+        targim2ID = catItems(thisTrial.targpair).im2idx;
+        pairType = catItems(thisTrial.targpair).pairType;
+        foilim1ID = catFoils(thisTrial.foilpair).im1idx;
+        foilim2ID = catFoils(thisTrial.foilpair).im2idx;
     else
-        blockbreakstring = '2-back block beginning... \n Press the left button when the image displayed is NOT an image that appeared immmediately before the last image \n and the right button if it did appear immediately before the last image. Try to be as accurate as possible.';
-        if block > 2
-            blockbreakstring = [blockbreakstring '\nYou were ' num2str(nbackperf) '% correct on the last 2-back block.'];
-        end
+        targim1ID = nbackItems(thisTrial.targpair).im1idx;
+        targim2ID = nbackItems(thisTrial.targpair).im2idx;
+        pairType = nbackItems(thisTrial.targpair).pairType;
+        foilim1ID = nbackFoils(thisTrial.foilpair).im1idx;
+        foilim2ID = nbackFoils(thisTrial.foilpair).im2idx;
     end
-    DrawFormattedText(w, blockbreakstring, 'center', 'center', [0 0 0]);
     
-    instructionsUpTime = Screen(w, 'Flip', expStart+trainingBlocks(block).InstUp);
-   
+    if thisTrial.order == 1
+        im1 = targim1ID;
+        im2 = targim2ID;
+        im3 = foilim1ID;
+        im4 = foilim2ID;
+    else
+        im3 = targim1ID;
+        im4 = targim2ID;
+        im1 = foilim1ID;
+        im2 = foilim2ID;
+    end
+    
+    % wait for trial start
+    DrawFormattedText(w, ['Press space to start trial ' num2str(idx) ' of ' num2str(length(trialSequence)) '.\nTask: which pair was displayed in this order during training?'], 'center','center');
+    Screen('Flip',w);
     Screen(w, 'FrameOval', [0 0 0], fixRect);
-    instructionsDownTime = Screen(w, 'Flip', expStart+trainingBlocks(block).InstDown);
-    for trial = 1:length(trainingBlocks(block).imOrder)
-        RT = -1;
-        Screen('DrawTexture', w, imTexs(trainingBlocks(block).imOrder(trial)), [], imRect);
-        imUptime = Screen(w, 'Flip', expStart + trainingBlocks(block).ImUp(trial) - .001);
-        trainingBlocks(block).upTimeErr(trial) = imUptime-(trainingBlocks(block).ImUp(trial)+expStart);
-        respReceived = 0; 
-        resp = [];
-        while (GetSecs - imUptime) < (upDur - .001)
-            [keyDown, secs, keyCodes] = KbCheck(-1);
-            if keyDown
-                if any(keyCodes([KbName('n'), KbName('m'), KbName('q')]))
-                    respReceived = 1;
-                    resp = find(keyCodes);
-                    RT = secs - imUptime;
-                    break;
-                end
+    while 1
+        [keyDown, secs, keyCodes] = KbCheck(-1);
+        if keyDown
+            if keyCodes(KbName('space'))
+                break;
+            elseif keyCodes(KbName('q')) && keyCodes(KbName('p'))
+                fclose(fp); save(savepathmat); sca; return;
             end
         end
-        while (GetSecs - imUptime) < (upDur - .001)
-        end
-        
-        if keyCodes(KbName('q'))
-            sca; return;
-        end
-        
-        if length(resp) > 1
-            acc = 0;
-        elseif length(resp) == 0
-            acc = 0;
-        elseif strmatch(KbName(resp), trainingBlocks(block).correctResp{trial})
-            acc = 1;
-            if strmatch(trainingBlocks(block).task, 'cat')
-                cataccount = cataccount + 1;
-            else
-                nbackaccount = nbackaccount + 1;
-            end
-        else
-            acc = 0;
-        end
-        
-        
-        if acc
-            Screen(w, 'FillOval', [0 255 0], fixRect);
-        elseif length(resp) == 0
-            DrawFormattedText(w, 'TOO SLOW!', 'center','center',[255 0 0]);
-        else
-            Screen(w, 'FillOval', [255 0 0], fixRect);
-        end
-        lastMarker = Screen(w, 'Flip', expStart+trainingBlocks(block).ImUp(trial) + upDur);
-        
-        trainingBlocks(block).RT = [trainingBlocks(block).RT RT];
-        trainingBlocks(block).AC = [trainingBlocks(block).AC acc];
-        
-        fprintf(fp, '%s, %d, %d, %s, %d, %d, %s, %s, %d, %s, %s, %s, %2.4f, %d, %2.4f\n', ... 
-        subID, runNum, block, trainingBlocks(block).task, ...
-        trial, respReceived, KbName(resp), trainingBlocks(block).correctResp{trial}, ...
-        trainingBlocks(block).imOrder(trial), trainingBlocks(block).imNames{trial}, ...
-        trainingBlocks(block).pairType{trial}, trainingBlocks(block).trialType{trial}, ...
-        trainingBlocks(block).upTimeErr(trial), ...
-        acc, RT);
     end
-      
-    if strmatch(trainingBlocks(block).task, 'cat')
-        catperf = round(100*cataccount/length(trainingBlocks(block).imOrder));
-    else
-        nbackperf = round(100*nbackaccount/length(trainingBlocks(block).imOrder));
-    end
-   
-end
+    
+    instDown = Screen('Flip',w);
+    
+    DrawFormattedText(w, 'Pair #1', 'center','center');
 
-% save data
+    text1Up = Screen('Flip', w, instDown + ISI);
+    
+    Screen(w, 'FrameOval', [0 0 0], fixRect);
+    text1Down = Screen('Flip', w, text1Up + upDur);
+    
+    Screen('DrawTexture', w, imTexs(im1), [], imRect);
+    im1Up = Screen('Flip', w, text1Down + ISI);
+    
+    Screen(w, 'FrameOval', [0 0 0], fixRect);
+    im1Down = Screen('Flip', w, im1Up + upDur);
+    
+    Screen('DrawTexture', w, imTexs(im2), [], imRect);
+    im2Up = Screen('Flip', w, im1Down + ISI);
+    
+    Screen(w, 'FrameOval', [0 0 0], fixRect);
+    im2Down = Screen('Flip', w, im2Up + upDur);
+    
+    DrawFormattedText(w, 'Pair #2', 'center','center');
+    text2Up = Screen('Flip', w, im2Down + ISI);
+    
+    Screen(w, 'FrameOval', [0 0 0], fixRect);
+    text2Down = Screen('Flip', w, text2Up + upDur);
+    
+    Screen('DrawTexture', w, imTexs(im3), [], imRect);
+    im3Up = Screen('Flip', w, text2Down + ISI);
+    
+    Screen(w, 'FrameOval', [0 0 0], fixRect);
+    im3Down = Screen('Flip', w, im3Up + upDur);
+    
+    Screen('DrawTexture', w, imTexs(im4), [], imRect);
+    im4Up = Screen('Flip', w, im3Down + ISI);
+    
+    Screen(w, 'FrameOval', [0 0 0], fixRect);
+    im4Down = Screen('Flip', w, im4Up + upDur);
+    
+    DrawFormattedText(w, 'Pair #1 or Pair #2? Use 1 and 2 keys.', 'center','center');
+    finalTextUp = Screen('Flip', w, im4Down + ISI);
+    
+    while 1
+        [keyDown, secs, keyCodes] = KbCheck(-1);
+        if keyDown
+            if keyCodes(KbName('1!'))
+                resp = 1;
+                rt = secs - finalTextUp;
+                acc = (resp == thisTrial.order);
+                break;
+            elseif keyCodes(KbName('2@'))
+                resp = 2;
+                rt = secs - finalTextUp;
+                acc = (resp == thisTrial.order);
+                break;
+            elseif keyCodes(KbName('q')) && keyCodes(KbName('p'))
+                fclose(fp); save(savepathmat); sca; return;
+            end
+        end
+    end
+    thisTrial.resp = resp;
+    recogTrials(trialID).resp = resp;
+     recogTrials(trialID).acc = acc;
+      recogTrials(trialID).rt = rt;
+       recogTrials(trialID).pairType = pairType;
+    %  save data to csv
+    fprintf(fp, '%s, %d, %s, %d, %d, %d, %d, %d, %2.4f\n', ... 
+        subID, runNum, pairType, thisTrial.order, thisTrial.targpair, thisTrial.foilpair, ...
+        resp, acc, rt);
+    
+end
 save(savepathmat);
 fclose(fp);
-
-while (GetSecs-expStart) > endTime
-end
-
-% clean up screen stuff
 sca;
 
-% TODO :  - Test this program
-%         - Make passive viewing task for scanner
-%         - Make recognition test program
-
 end
-

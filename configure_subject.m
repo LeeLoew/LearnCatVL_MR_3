@@ -131,6 +131,8 @@ end
 catFoils = catItems(1:(nPairs));
 nbackFoils = nbackItems(1:(nPairs));
 
+
+
 for idx = 1:nPairs
     % for most pairs, swap in the second item from the next pair. 
     if (idx == (nPairs/4)) % for last 'same' pair of n/n, use the first pair's second item
@@ -161,6 +163,40 @@ for idx = 1:nPairs
     end
 end
 
+% this matrix is hard-coded, unfortunately.
+% match target pair 1 with foil pair 3, and so on. 
+% matches same targets vs. same foils and different targets vs. different
+% foils
+recogTrialsPairs = [1, 3;
+               1, 4;
+               2, 4;
+               2, 1;
+               3, 1;
+               3, 2;
+               4, 1;
+               4, 2;
+               5, 7;
+               5, 8;
+               6, 8;
+               6, 5;
+               7, 1;
+               7, 2;
+               8, 1;
+               8, 2];
+ recogTrials = [];
+ for idx = 1:size(recogTrialsPairs,1)
+     for task = {'cat','nback'}
+         recogTrials = [recogTrials, struct('targpair', recogTrialsPairs(idx,1), ...
+                                            'foilpair', recogTrialsPairs(idx,2), ...
+                                            'task', task{1}, ...
+                                            'order' , 1)];
+         recogTrials = [recogTrials, struct('targpair', recogTrialsPairs(idx,1), ...
+                                            'foilpair', recogTrialsPairs(idx,2), ...
+                                            'task', task{1}, ...
+                                            'order' , 2)];
+     end
+ end
+ 
 % training run order 
 if counterCond == 'A'
     % this tells the script which task to start with on each training run
@@ -420,7 +456,7 @@ end
 %% save everything
                                      
 save(['Configurations/' subID], 'catItems', 'nbackItems', 'randseed', 'imageList', 'nPairs', 'nSingletons', ...
-    'trainingOrder', 'counterCond', 'catFoils', 'nbackFoils', 'pvDesigns');
+    'trainingOrder', 'counterCond', 'catFoils', 'nbackFoils', 'pvDesigns', 'recogTrials');
 
 end
 
