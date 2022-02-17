@@ -31,7 +31,7 @@ nSingletons = 8; % per condition -- nback / cat
 % random seed
 randseed = rng('shuffle');
 
-imageList = Shuffle(dir("TaskImages/*.jpg"));
+imageList = Shuffle(dir('TaskImages/*.jpg'));
 
 % each of these arrays will have a struct member for each pair / singleton
 % fields are im1 index, im1 name, im2 index, im2 name, im1 catID, im2 catID, pairtype
@@ -250,6 +250,14 @@ ITIs = repmat(ITIs, 1, length(trialOrder)/6);
 
 pvDesigns = {};
 
+% NOTE (TJV) 8/23/2021:
+% As of this writing, we have this configured for 48 trials lasting 1
+% second each. The start delay is 5 seconds (startDelay). Each run is 413 s
+% without any sort of final delay. Adding 5 seconds to end (endDelay).
+% Trial total duration is currently 418s, or 6m58s.
+
+endDelay = 5;
+
 for thisrun = 1:pvruns
     maxCor = 1; % compute maximum absolute correlation, if it exceeds threshold, regenerate sequence
     while maxCor > threshCor
@@ -449,6 +457,7 @@ end
     pvDesigns{thisrun}.onsetSequence = onsetSequence;
     pvDesigns{thisrun}.corrRespSequence = corrRespSequence;
     pvDesigns{thisrun}.conditionSequence = conditionSequence;
+    pvDesigns{thisrun}.totalDur = onsetSequence(end) + 1 + ITI_orders(end) + endDelay;
 
 end
 

@@ -11,8 +11,11 @@ subID = answer{1};
 runNum = str2num(answer{2});
 
 outFileMat = ['Data/PVStage_' subID '_' answer{2} '.mat'];
+outFileCSV = ['Data/PVStage_' subID '_' answer{2} '.csv'];
 
-% TODO: check that this run doesn't have a data file
+% TODO -- overwrite protection. check that this run doesn't have a data file
+
+fp = fopen(outFileCSV,'w'); 
 
 % load subject configuration file
 load(['Configurations/' subID '.mat']);
@@ -26,7 +29,7 @@ monitorDur = 3; % monitor for this many seconds for response -- record but count
 % set up screen
 % configure screen
 Screen('Preference', 'SkipSyncTests', 1);
-[w, wrect] = Screen('OpenWindow',0,[127, 127, 127],[0 0 1920 1080]);  % DEBUG -- change to full screen
+[w, wrect] = Screen('OpenWindow',0,[127, 127, 127], [0 0 1024 768]); %,[0 0 1920 1080]);  % DEBUG -- change to full screen
 
 fixRect = CenterRect([0 0 20 20], wrect);
 imRect = CenterRect([0 0 200 200], wrect);
@@ -52,7 +55,7 @@ for idx = 1:length(thisDesign.imageSequence)
 end
 
 % show instructions
-DrawFormattedText(w, 'Put instructions here. Trigger proceeds.', 'center', 'center');
+DrawFormattedText(w, 'Indicate "brand new" or "previously viewed" for each image using the same two buttons. \n Be sure to respond within the one second the image is on screen. \n Trigger proceeds, please wait.', 'center', 'center');
 Screen('Flip',w);
 
 Screen(w, 'FrameOval', [0 0 0], fixRect);
@@ -69,9 +72,12 @@ expStart = Screen(w, 'Flip');
 % trial loop
 thisDesign.upTimeErr = [];
 nTrials = length(thisDesign.imageSequence);
+
+
+    
 for trial = 1:nTrials
     % show the image, monitor response
-    RT = -1;
+    RT = -1; slowRespReceived = 0; 
     Screen('DrawTexture', w, thisDesign.imTex(trial), [], imRect);
     imUptime = Screen(w, 'Flip', expStart + thisDesign.onsetSequence(trial) - .001);
     thisDesign.upTimeErr(trial) = imUptime-thisDesign.onsetSequence(trial)+expStart;
@@ -91,6 +97,11 @@ for trial = 1:nTrials
             end
         end
     end
+    
+    thisDesign.acc(trial) = 0;
+    thisDesign.resp(trial) = -1;
+    thisDesign.RT(trial) = -1;
+    
     
     % check response accuracy
     if respReceived
@@ -112,6 +123,12 @@ for trial = 1:nTrials
     Screen(w, 'FrameOval', [0 0 0], fixRect);
     imDowntime = Screen(w, 'Flip', expStart + thisDesign.onsetSequence(trial) + upDur - .001);
     
+    slowrespReceived = 0;
+    
+    thisDesign.slowacc(trial) = thisDesign.acc(trial);
+    thisDesign.slowresp(trial) = thisDesign.resp(trial);
+    thisDesign.slowRT(trial) = thisDesign.RT(trial);
+    
     if ~respReceived
         % keep monitoring for slow response
         % we will keep monitoring for additional 2 seconds, but mark as slow
@@ -130,6 +147,7 @@ for trial = 1:nTrials
             end
         end
         
+        
          % check response accuracy
     if slowrespReceived
         if length(find(slowresp)) > 1 % error -- pressed multiple buttons
@@ -147,6 +165,16 @@ for trial = 1:nTrials
     end
     end
     % record data
+    fprintf(fp, '%s, %d, %s, %d, %d, %2.4f, %d, %d, %2.4f, %2.4f, %s, %s\n', ... 
+        subID, runNum, thisDesign.conditionSequence{trial}, thisDesign.acc(trial), thisDesign.resp(trial), ...
+        thisDesign.RT(trial), thisDesign.slowacc(trial), thisDesign.slowresp(trial), thisDesign.slowRT(trial), ...
+        thisDesign.upTimeErr(trial), thisDesign.imageSequence{trial}, ...
+        thisDesign.corrRespSequence{trial});
+end
+
+fclose(fp);
+
+while (GetSecs - expStart) < thisDesign.totalDur
 end
 
 % save data and clean up

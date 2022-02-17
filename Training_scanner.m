@@ -247,7 +247,11 @@ for idx = 1:(2*nMiniBlocks)
             imOrder = [imOrder, catItems(pairOrder.pairID(jdx)).im1idx];
             imNames = {imNames{:}, catItems(pairOrder.pairID(jdx)).im1name};
             pairType = {pairType{:}, catItems(pairOrder.pairID(jdx)).pairType};
-            correctResp = {correctResp{:}, catItems(pairOrder.pairID(jdx)).im1cat};
+            if catItems(pairOrder.pairID(jdx)).im1cat == 'n'
+                    correctResp = {correctResp{:}, '1!'};
+                else
+                     correctResp = {correctResp{:}, '2@'};
+            end
             if strmatch(pairType{end}, 'singleton');
                 trialType = {trialType{:}, 'cat_singleton'};
                 if pairOrder.repFlag(jdx) == 3
@@ -266,7 +270,11 @@ for idx = 1:(2*nMiniBlocks)
                 imOrder = [imOrder, catItems(pairOrder.pairID(jdx)).im2idx];
                 imNames = {imNames{:}, catItems(pairOrder.pairID(jdx)).im2name};
                 pairType = {pairType{:}, catItems(pairOrder.pairID(jdx)).pairType};
-                correctResp = {correctResp{:}, catItems(pairOrder.pairID(jdx)).im2cat};
+                if catItems(pairOrder.pairID(jdx)).im2cat == 'n'
+                    correctResp = {correctResp{:}, '1!'};
+                else
+                     correctResp = {correctResp{:}, '2@'};
+                end
                 trialType = {trialType{:}, ['cat_' catItems(pairOrder.pairID(jdx)).pairType '_pair2']};
                 if pairOrder.repFlag(jdx) == 2
                     upcoming2back = [upcoming2back, 1];
@@ -278,7 +286,7 @@ for idx = 1:(2*nMiniBlocks)
             imOrder = [imOrder, nbackItems(pairOrder.pairID(jdx)).im1idx];
             imNames = {imNames{:}, nbackItems(pairOrder.pairID(jdx)).im1name};
             pairType = {pairType{:}, nbackItems(pairOrder.pairID(jdx)).pairType};
-            correctResp = {correctResp{:}, 'n'};
+            correctResp = {correctResp{:}, '1!'};
             if strmatch(pairType{end}, 'singleton');
                 trialType = {trialType{:}, 'nback_singleton'};
                 if pairOrder.repFlag(jdx) == 3
@@ -297,7 +305,7 @@ for idx = 1:(2*nMiniBlocks)
                 imOrder = [imOrder, nbackItems(pairOrder.pairID(jdx)).im2idx];
                 imNames = {imNames{:}, nbackItems(pairOrder.pairID(jdx)).im2name};
                 pairType = {pairType{:}, nbackItems(pairOrder.pairID(jdx)).pairType};
-                correctResp = {correctResp{:}, 'n'}; % not a 2-back, respond 'n'
+                correctResp = {correctResp{:}, '1!'}; % not a 2-back, respond 'n'
                 trialType = {trialType{:}, ['nback_' nbackItems(pairOrder.pairID(jdx)).pairType '_pair2']};
                 if pairOrder.repFlag(jdx) == 2
                     upcoming2back = [upcoming2back, 1];
@@ -316,9 +324,13 @@ for idx = 1:(2*nMiniBlocks)
             thisPairType = pairType{curIdx};
             thisTrialType = trialType{curIdx};
             if (strmatch(curTask, 'cat'))
-                thisCorrectResp = correctResp{curIdx};
+                if (correctResp{curIdx} == '1!')
+                    thisCorrectResp = '1!';
+                else
+                    thisCorrectResp = '2@';
+                end
             else
-                thisCorrectResp = 'm';
+                thisCorrectResp = '2@';
             end
             imOrder = [imOrder(1:(curIdx+1)) repItem imOrder(min(length(imOrder)+1, (curIdx+2)):end)];
             imNames = {imNames{1:(curIdx+1)}, imNames{curIdx}, imNames{min(length(imOrder)+1, (curIdx+2)):end}};
@@ -357,7 +369,7 @@ endTime = curTime + 10;
 
 % configure screen
 Screen('Preference', 'SkipSyncTests', 1);
-[w, wrect] = Screen('OpenWindow',0,[127, 127, 127], [0 0 800 600]); % [0 0 1920 1080]);  % DEBUG -- change to full screen
+[w, wrect] = Screen('OpenWindow',0,[127, 127, 127]); % [0 0 1920 1080]);  % DEBUG -- change to full screen
 
 fixRect = CenterRect([0 0 20 20], wrect);
 
@@ -427,7 +439,7 @@ for block = 1:length(trainingBlocks)
         while (GetSecs - imUptime) < (upDur - .001)
             [keyDown, secs, keyCodes] = KbCheck(-1);
             if keyDown
-                if any(keyCodes([KbName('n'), KbName('m'), KbName('q')]))
+                if any(keyCodes([KbName('1!'), KbName('2@'), KbName('q')]))
                     respReceived = 1;
                     resp = find(keyCodes);
                     RT = secs - imUptime;
