@@ -29,8 +29,8 @@ monitorDur = 3; % monitor for this many seconds for response -- record but count
 % set up screen
 % configure screen
 Screen('Preference', 'SkipSyncTests', 1);
-[w, wrect] = Screen('OpenWindow',0,[127, 127, 127], [0 0 1024 768]); %,[0 0 1920 1080]);  % DEBUG -- change to full screen
-
+%[w, wrect] = Screen('OpenWindow',0,[127, 127, 127], [0 0 1024 768]); %,[0 0 1920 1080]);  % DEBUG -- change to full screen
+[w, wrect] = Screen('OpenWindow',0,[127, 127, 127], [0 0 1920 1080]);  % DEBUG -- change to full screen
 fixRect = CenterRect([0 0 20 20], wrect);
 imRect = CenterRect([0 0 200 200], wrect);
 
