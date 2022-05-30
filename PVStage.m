@@ -1,7 +1,7 @@
 function PVStage
 % PVStage Not quite passive viewing -- detect old vs. new image
 
-prompt={'Enter the subject ID','Old v. New run number'};
+prompt={'Enter the subject ID','run number'};
 name='Input for PV run';
 numlines=1;
 defaultanswer={'x','0'};
@@ -55,7 +55,7 @@ for idx = 1:length(thisDesign.imageSequence)
 end
 
 % show instructions
-DrawFormattedText(w, 'Indicate "brand new" or "previously viewed" for each image using the same two buttons. \n Be sure to respond within the one second the image is on screen. \n Trigger proceeds, please wait.', 'center', 'center');
+DrawFormattedText(w, 'Indicate "brand new" or "previously viewed" for each image using the same two buttons. \n Press the first button with your pointer finger for an image you have seen before. \n Press the second button with your middle finger for new images you have never seen before. \n Be sure to respond within the one second while the image is on screen. \n Trigger proceeds, please wait. \n \n Reminder: \n Old = first button (pointer finger) \n New = second button (middle finger)', 'center', 'center');
 Screen('Flip',w);
 
 Screen(w, 'FrameOval', [0 0 0], fixRect);
