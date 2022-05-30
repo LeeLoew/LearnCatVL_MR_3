@@ -1,0 +1,12 @@
+99, 1, 1, cat, 1, 0, , 2@, 21, 063.jpg, singleton, cat_singleton, 0.0119, 0, -1.0000
+99, 1, 1, cat, 2, 0, , 2@, 22, 038.jpg, singleton, cat_singleton, 0.0141, 0, -1.0000
+99, 1, 1, cat, 3, 0, , 2@, 11, 081.jpg, different, cat_different_pair1, 0.0161, 0, -1.0000
+99, 1, 1, cat, 4, 0, , 2@, 22, 038.jpg, singleton, cat_singleton_2back, 0.0013, 0, -1.0000
+99, 1, 1, cat, 5, 0, , 1!, 12, 028.jpg, different, cat_different_pair2, 0.0034, 0, -1.0000
+99, 1, 1, cat, 6, 1, 1!, 1!, 13, 052.jpg, different, cat_different_pair1, 0.0054, 1, 0.6540
+99, 1, 1, cat, 7, 1, 2@, 2@, 14, 067.jpg, different, cat_different_pair2, 0.0073, 1, 0.6119
+99, 1, 1, cat, 8, 1, 1!, 2@, 7, 025.jpg, same, cat_same_pair1, 0.0094, 0, 0.3699
+99, 1, 1, cat, 9, 1, 1!, 2@, 8, 042.jpg, same, cat_same_pair2, 0.0114, 0, 0.3516
+99, 1, 1, cat, 10, 1, 2@, 1!, 19, 011.jpg, singleton, cat_singleton, 0.0134, 0, 0.4378
+99, 1, 1, cat, 11, 1, 1!, 1!, 20, 093.jpg, singleton, cat_singleton, 0.0154, 1, 0.4998
+99, 1, 1, cat, 12, 0, , 2@, 23, 056.jpg, singleton, cat_singleton, 0.0174, 0, -1.0000
