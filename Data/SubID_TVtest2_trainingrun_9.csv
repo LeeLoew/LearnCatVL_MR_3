@@ -1,9 +1,0 @@
-TVtest2, 9, 1, cat, 1, 1, 1!, 2@, 9, 056.jpg, different, cat_different_pair1, 0.0174, 0, 0.5169
-TVtest2, 9, 1, cat, 2, 1, 1!, 1!, 10, 089.jpg, different, cat_different_pair2, 0.0176, 1, 0.2417
-TVtest2, 9, 1, cat, 3, 1, 1!, 2@, 9, 056.jpg, different, cat_different_pair1_2back, 0.0177, 0, 0.2675
-TVtest2, 9, 1, cat, 4, 1, 1!, 1!, 3, 025.jpg, same, cat_same_pair1, 0.0177, 1, 0.5429
-TVtest2, 9, 1, cat, 5, 1, 1!, 1!, 4, 036.jpg, same, cat_same_pair2, 0.0179, 1, 0.4412
-TVtest2, 9, 1, cat, 6, 1, 2@, 2@, 5, 022.jpg, same, cat_same_pair1, 0.0179, 1, 0.8671
-TVtest2, 9, 1, cat, 7, 1, 1!, 2@, 6, 008.jpg, same, cat_same_pair2, 0.0181, 0, 0.5919
-TVtest2, 9, 1, cat, 8, 1, 1!, 1!, 1, 095.jpg, same, cat_same_pair1, 0.0183, 1, 0.4660
-TVtest2, 9, 1, cat, 9, 1, 2@, 2@, 6, 008.jpg, same, cat_same_pair2_2back, 0.0018, 1, 0.5334
