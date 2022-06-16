@@ -1,0 +1,17 @@
+TVtest2, 7, 1, cat, 1, 1, 1!, 2@, 23, 047.jpg, singleton, cat_singleton, 0.0175, 0, 0.9344
+TVtest2, 7, 1, cat, 2, 1, 1!, 2@, 11, 031.jpg, different, cat_different_pair1, 0.0175, 0, 0.2601
+TVtest2, 7, 1, cat, 3, 1, 2@, 1!, 12, 050.jpg, different, cat_different_pair2, 0.0178, 0, 0.2600
+TVtest2, 7, 1, cat, 4, 1, 1!, 2@, 21, 017.jpg, singleton, cat_singleton, 0.0178, 0, 0.1850
+TVtest2, 7, 1, cat, 5, 1, 1!, 2@, 5, 022.jpg, same, cat_same_pair1, 0.0179, 0, 0.2347
+TVtest2, 7, 1, cat, 6, 1, 1!, 2@, 6, 008.jpg, same, cat_same_pair2, 0.0180, 0, 0.1845
+TVtest2, 7, 1, cat, 7, 1, 1!, 2@, 5, 022.jpg, same, cat_same_pair1_2back, 0.0181, 0, 0.2093
+TVtest2, 7, 1, cat, 8, 1, 1!, 1!, 18, 035.jpg, singleton, cat_singleton, 0.0182, 1, 0.2093
+TVtest2, 7, 1, cat, 9, 1, 1!, 1!, 13, 037.jpg, different, cat_different_pair1, 0.0183, 1, 0.2333
+TVtest2, 7, 1, cat, 10, 1, 1!, 2@, 14, 004.jpg, different, cat_different_pair2, 0.0015, 0, 0.2078
+TVtest2, 7, 1, cat, 11, 1, 1!, 1!, 20, 080.jpg, singleton, cat_singleton, 0.0018, 1, 0.2259
+TVtest2, 7, 1, cat, 12, 1, 2@, 2@, 14, 004.jpg, different, cat_different_pair2_2back, 0.0021, 1, 0.3755
+TVtest2, 7, 1, cat, 13, 1, 1!, 2@, 20, 080.jpg, singleton, cat_singleton_2back, 0.0189, 0, 0.4578
+TVtest2, 7, 1, cat, 14, 1, 1!, 1!, 17, 061.jpg, singleton, cat_singleton, 0.0023, 1, 0.6256
+TVtest2, 7, 1, cat, 15, 1, 1!, 1!, 19, 082.jpg, singleton, cat_singleton, 0.0025, 1, 0.5491
+TVtest2, 7, 1, cat, 16, 0, , 2@, 17, 061.jpg, singleton, cat_singleton_2back, 0.0025, 0, -1.0000
+TVtest2, 7, 1, cat, 17, 0, , 2@, 24, 015.jpg, singleton, cat_singleton, 0.0027, 0, -1.0000
